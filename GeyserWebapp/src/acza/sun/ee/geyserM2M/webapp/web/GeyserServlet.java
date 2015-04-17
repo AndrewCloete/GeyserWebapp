@@ -1,4 +1,4 @@
-package acza.sun.ee.geyserM2M.webapp;
+package acza.sun.ee.geyserM2M.webapp.web;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -26,16 +26,16 @@ public class GeyserServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html");
-		response.setStatus(HttpServletResponse.SC_OK);
-		response.getWriter().println("<h1>Hello from GeyserServlet</h1>");
+
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		response.setContentType("text/html");
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.getWriter().println("<h1>Hello from GeyserServlet</h1>");
 	}
 
 }
