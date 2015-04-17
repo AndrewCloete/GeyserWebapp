@@ -1,6 +1,8 @@
 package acza.sun.ee.geyserM2M.webapp.web;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,16 +28,19 @@ public class GeyserServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		request.setAttribute("geyserID", "mock: sim_geyser_1");
+		request.setAttribute("internalTemp", "mock: 45.5");
+		request.setAttribute("elementState", "mock: true");
+		
+		RequestDispatcher view = request.getRequestDispatcher("/geyserstatus.jsp");
+		view.forward(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html");
-		response.setStatus(HttpServletResponse.SC_OK);
-		response.getWriter().println("<h1>Hello from GeyserServlet</h1>");
+
 	}
 
 }

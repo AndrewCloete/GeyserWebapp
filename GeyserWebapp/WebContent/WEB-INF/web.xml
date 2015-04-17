@@ -8,7 +8,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>GeyserServlet</servlet-name>
-    <url-pattern>/geyserlogin.do</url-pattern>
+    <url-pattern>/geyserstatus</url-pattern>
   </servlet-mapping>
   
   
