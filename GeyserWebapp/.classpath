@@ -8,7 +8,11 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/andrew/eclipse/plugins/javax.servlet_3.0.0.v201112011016.jar"/>
+	<classpathentry kind="lib" path="/home/andrew/eclipse/plugins/javax.servlet_3.0.0.v201112011016.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="/home/andrew/eclipse/plugins/org.apache.commons.codec_1.4.0.v201209201156.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
