@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------------------------------------------------
  */
 
-package acza.sun.ee.geyserM2M.webapp.web;
+package acza.sun.ee.geyserM2M.webapp.controller;
 
 import acza.sun.ee.geyserM2M.webapp.model.SCLhttpClient;
 
@@ -48,27 +48,48 @@ public class GeyserServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String nip_id = "geyser_udpNIP";
-		String container_id = "1234_data";
-		String content_uri = "localhost:8080/om2m/nscl/applications/" + nip_id + "/containers/" + container_id + "/contentInstances/latest";
-		
-		String scl_reply = SCLhttpClient.get(content_uri);
-		System.out.println(scl_reply);//Debug reply
-		
-		request.setAttribute("geyserID", getValueFromJSON("id", scl_reply));
-		request.setAttribute("internalTemp", getValueFromJSON("t1", scl_reply));
-		request.setAttribute("elementState", getValueFromJSON("e", scl_reply));
-		
-		RequestDispatcher view = request.getRequestDispatcher("/geyserstatus.jsp");
-		view.forward(request, response);
+		System.out.println("Hello GET");//Debug reply
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		final String NIP_ID = "geyser_udpNIP";
+		String geyser_id = request.getParameter("geyser_id_box");
+		String data_container_id = geyser_id + "_data";
+		String control_container_id = geyser_id + "_control_settings";
+		String data_container_uri = "localhost:8080/om2m/nscl/applications/" + NIP_ID + "/containers/" + data_container_id + "/contentInstances/latest";
+		String control_container_uri = "localhost:8080/om2m/nscl/applications/" + NIP_ID + "/containers/" + control_container_id + "/contentInstances";
+		
+		String scl_reply = SCLhttpClient.get(data_container_uri);
+		System.out.println(scl_reply);//Debug reply
+		System.out.println(data_container_id);
 
+		request.setAttribute("geyserID", getValueFromJSON("id", scl_reply));
+		request.setAttribute("internalTemp", getValueFromJSON("t1", scl_reply));
+		request.setAttribute("elementState", getValueFromJSON("e", scl_reply));
+		request.setAttribute("geyser_id_box", geyser_id);
+		
+		String next_element_state = request.getParameter("element_select");
+
+		try{
+			if(next_element_state.equals("ON")){
+				SCLhttpClient.post(control_container_uri, "{\"e\":\"true\"}");
+				System.out.println("Element on select: " + next_element_state);
+			}
+			else if (next_element_state.equals("OFF")){
+				SCLhttpClient.post(control_container_uri, "{\"e\":\"false\"}");
+				System.out.println("Element off select: " + next_element_state);
+			}
+			else{
+				System.out.println("Element none select: " + next_element_state);
+			}
+		}catch(NullPointerException e){}
+		
+		RequestDispatcher view = request.getRequestDispatcher("/geyserstatus.jsp");
+		view.forward(request, response);
 	}
 	
 	
@@ -87,7 +108,9 @@ public class GeyserServlet extends HttpServlet {
 			System.out.println("position: " + pe.getPosition());
 			System.out.println(pe);
 
-			return "error";
+			return "Parse error";
+		}catch(NullPointerException e){
+			return "Unavailable";
 		}
 	}
 

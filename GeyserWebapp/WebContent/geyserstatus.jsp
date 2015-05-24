@@ -61,8 +61,36 @@
 </table>
 </p>
 
-<form method="get" action="geyserstatus" >
+<form method="POST" action="geyserstatus" >
 <table class="center">
+<tr>
+	<th>Geyser ID:</th>
+	<td>
+ 		 <input type="text" name="geyser_id_box" value=<%= request.getAttribute("geyser_id_box") %>><br>
+ 	</td>
+</tr>
+</tr>
+<tr>
+	<th>Switch element:</th>
+	<td>
+ 		 <select name = "element_select">
+ 		 	<option value="-">--</option>
+ 		 	<option value="OFF">OFF</option>
+ 		 	<option value="ON">ON</option>
+ 		 </select>
+ 	</td>
+</tr>
+<!--  
+<tr>
+	<th>Switch valve:</th>
+	<td>
+ 		 <select name = "valve_select">
+ 		 	<option value="ON">ON</option>
+ 		 	<option value="OFF">OFF</option>
+ 		 </select>
+ 	</td>
+</tr>
+-->
 <tr>
 	<th></th>
 	<td>
