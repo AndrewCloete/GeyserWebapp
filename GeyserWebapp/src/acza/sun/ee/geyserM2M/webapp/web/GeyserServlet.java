@@ -22,7 +22,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.codec.binary.Base64;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.ParseException;
+import org.json.simple.parser.JSONParser;
 
 /**
  * Servlet implementation class GeyserServlet
@@ -46,19 +49,16 @@ public class GeyserServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		final String GEYSER_ID = "sim_geyser_1";
-		final String CONTAINER_ID = "DATA";
-		final String CONTENT_URI = "localhost:8181/om2m/gscl/applications/" + GEYSER_ID + "/containers/" + CONTAINER_ID + "/contentInstances/latest";
+		String nip_id = "geyser_udpNIP";
+		String container_id = "1234_data";
+		String content_uri = "localhost:8080/om2m/nscl/applications/" + nip_id + "/containers/" + container_id + "/contentInstances/latest";
 		
-		String content64 = SCLhttpClient.get(CONTENT_URI);
-		//System.out.println(content64);//Debug reply
+		String scl_reply = SCLhttpClient.get(content_uri);
+		System.out.println(scl_reply);//Debug reply
 		
-		String decoded = new String(Base64.decodeBase64(content64.getBytes()));
-		//System.out.println(decoded);
-		
-		request.setAttribute("geyserID", SCLhttpClient.parseInstanceContent(decoded, "appId"));
-		request.setAttribute("internalTemp", SCLhttpClient.parseInstanceContent(decoded, "Internal Temperature"));
-		request.setAttribute("elementState", SCLhttpClient.parseInstanceContent(decoded, "ElementState"));
+		request.setAttribute("geyserID", getValueFromJSON("id", scl_reply));
+		request.setAttribute("internalTemp", getValueFromJSON("t1", scl_reply));
+		request.setAttribute("elementState", getValueFromJSON("e", scl_reply));
 		
 		RequestDispatcher view = request.getRequestDispatcher("/geyserstatus.jsp");
 		view.forward(request, response);
@@ -69,6 +69,26 @@ public class GeyserServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+	}
+	
+	
+	private static Object getValueFromJSON(String key, String JSON){
+
+		JSONParser parser=new JSONParser();
+		try{
+			Object obj = parser.parse(JSON);
+			JSONArray array = new JSONArray();
+			array.add(obj);	
+			JSONObject jobj = (JSONObject)array.get(0);
+
+			return jobj.get(key);
+
+		}catch(ParseException pe){
+			System.out.println("position: " + pe.getPosition());
+			System.out.println(pe);
+
+			return "error";
+		}
 	}
 
 }

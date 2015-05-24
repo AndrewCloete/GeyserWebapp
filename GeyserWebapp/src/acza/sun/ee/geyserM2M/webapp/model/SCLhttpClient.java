@@ -16,12 +16,14 @@ import java.net.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.codec.binary.Base64;
+
 public class SCLhttpClient {
 	
 
 public static String get(String getURI){
 		
-		String content64reply = null;
+		String decoded_reply = null;
 	
 		try{
 			URL url = new URL("http://" + getURI);
@@ -44,7 +46,8 @@ public static String get(String getURI){
 				builder.append(line);
 			}
 			
-			content64reply =  parseSCLreply(builder.toString());
+			String content64 =  parseSCLreply(builder.toString());
+			decoded_reply = new String(Base64.decodeBase64(content64.getBytes()));
 			
 
 		}catch (MalformedURLException e){
@@ -53,7 +56,7 @@ public static String get(String getURI){
 			System.out.println(e2);
 		}
 		
-		return content64reply;
+		return decoded_reply;
 	}	
 	
 	
@@ -101,25 +104,6 @@ public static String get(String getURI){
 			return "SCL: NO MATCH 1";
 		}
 	}
-	
-	
-	public static String parseInstanceContent(String obix, String name){
-		/*
-		 * Regex geyserID, Temp and element
-		 */
-		
-		//(1)
-		Pattern r1 = Pattern.compile("(?<=<str val=\").{2,15}(?=\" name=\"" + name +"\")", Pattern.DOTALL);
-		Matcher m1 = r1.matcher(obix);
-		
-		if (m1.find( )) {
-			return m1.group(0);
-			
-		} else {
-			return "oBIX: NO MATCH 1";
-		}
-	}
-	
 	
 }
 
