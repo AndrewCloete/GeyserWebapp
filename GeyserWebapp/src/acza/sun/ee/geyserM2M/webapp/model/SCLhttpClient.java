@@ -60,7 +60,10 @@ public static String get(String getURI){
 	}	
 	
 	
-	public static void post(String postURI, String postData){
+	public static String post(String postURI, String postData){
+		
+		String xml_reply = null;
+		
 		try{
 			URL url = new URL("http://" + postURI);
 			HttpURLConnection urlcon = (HttpURLConnection) url.openConnection();
@@ -77,10 +80,14 @@ public static String get(String getURI){
 			InputStreamReader inr = new InputStreamReader(in);
 			BufferedReader bin = new BufferedReader(inr);
 
+			
+			StringBuilder builder = new StringBuilder();
 			String line;
 			while((line = bin.readLine()) != null){
-				System.out.println(line); //Debug reply
+				builder.append(line);
 			}
+			
+			xml_reply = builder.toString();
 
 		}catch (MalformedURLException e){
 			System.out.println(e);
@@ -88,6 +95,7 @@ public static String get(String getURI){
 			System.out.println(e2);
 		}
 	
+		return xml_reply;
 	}
 	
 	

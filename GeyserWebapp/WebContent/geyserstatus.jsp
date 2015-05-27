@@ -77,6 +77,7 @@
  		 	<option value="-">--</option>
  		 	<option value="OFF">OFF</option>
  		 	<option value="ON">ON</option>
+ 		 	<option value="AUTO">AUTO</option>
  		 </select>
  	</td>
 </tr>

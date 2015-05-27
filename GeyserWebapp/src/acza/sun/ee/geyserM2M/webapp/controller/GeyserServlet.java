@@ -76,11 +76,15 @@ public class GeyserServlet extends HttpServlet {
 
 		try{
 			if(next_element_state.equals("ON")){
-				SCLhttpClient.post(control_container_uri, "{\"e\":\"true\"}");
+				SCLhttpClient.post(control_container_uri, "{\"e\":\"ON\"}");
 				System.out.println("Element on select: " + next_element_state);
 			}
 			else if (next_element_state.equals("OFF")){
-				SCLhttpClient.post(control_container_uri, "{\"e\":\"false\"}");
+				SCLhttpClient.post(control_container_uri, "{\"e\":\"OFF\"}");
+				System.out.println("Element off select: " + next_element_state);
+			}
+			else if (next_element_state.equals("AUTO")){
+				SCLhttpClient.post(control_container_uri, "{\"e\":\"AUTO\"}");
 				System.out.println("Element off select: " + next_element_state);
 			}
 			else{
