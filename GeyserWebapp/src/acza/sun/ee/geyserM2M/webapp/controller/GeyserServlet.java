@@ -56,42 +56,35 @@ public class GeyserServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		final String NIP_ID = "geyser_udpNIP";
-		String geyser_id = request.getParameter("geyser_id_box");
-		String data_container_id = geyser_id + "_data";
-		String control_container_id = geyser_id + "_control_settings";
-		String data_container_uri = "localhost:8080/om2m/nscl/applications/" + NIP_ID + "/containers/" + data_container_id + "/contentInstances/latest";
-		String control_container_uri = "localhost:8080/om2m/nscl/applications/" + NIP_ID + "/containers/" + control_container_id + "/contentInstances";
+		long geyser_id = (long)0000; //Default id; TODO: Next version, find a better way to handle this
+		try{
+			geyser_id = new Long(request.getParameter("geyser_id_box"));
+		}catch(NumberFormatException e){
+			System.out.println("Invalid geyser_ID.");
+		}
+		
+		String application_id = "geyser_"+geyser_id;
+		String data_container_uri = "localhost:8080/om2m/nscl/applications/" + application_id + "/containers/DATA/contentInstances/latest";
+		String control_container_uri = "localhost:8080/om2m/nscl/applications/" + application_id + "/containers/SETTINGS/contentInstances";
 		
 		String scl_reply = SCLhttpClient.get(data_container_uri);
-		System.out.println(scl_reply);//Debug reply
-		System.out.println(data_container_id);
+		System.out.println("data_container_uri: " + data_container_uri);//Debug reply
 
 		request.setAttribute("geyserID", getValueFromJSON("id", scl_reply));
 		request.setAttribute("internalTemp", getValueFromJSON("t1", scl_reply));
 		request.setAttribute("elementState", getValueFromJSON("e", scl_reply));
 		request.setAttribute("geyser_id_box", geyser_id);
 		
+		
 		String next_element_state = request.getParameter("element_select");
-
 		try{
-			if(next_element_state.equals("ON")){
-				SCLhttpClient.post(control_container_uri, "{\"e\":\"ON\"}");
+		//If a new element mode is selected
+			if(!next_element_state.equals("-")){
+				SCLhttpClient.post(control_container_uri, "{\"e\":\""+ next_element_state +"\"}");
 				System.out.println("Element on select: " + next_element_state);
 			}
-			else if (next_element_state.equals("OFF")){
-				SCLhttpClient.post(control_container_uri, "{\"e\":\"OFF\"}");
-				System.out.println("Element off select: " + next_element_state);
-			}
-			else if (next_element_state.equals("AUTO")){
-				SCLhttpClient.post(control_container_uri, "{\"e\":\"AUTO\"}");
-				System.out.println("Element off select: " + next_element_state);
-			}
-			else{
-				System.out.println("Element none select: " + next_element_state);
-			}
 		}catch(NullPointerException e){}
-		
+		//Update view
 		RequestDispatcher view = request.getRequestDispatcher("/geyserstatus.jsp");
 		view.forward(request, response);
 	}
@@ -109,7 +102,6 @@ public class GeyserServlet extends HttpServlet {
 			return jobj.get(key);
 
 		}catch(ParseException pe){
-			System.out.println("position: " + pe.getPosition());
 			System.out.println(pe);
 
 			return "Parse error";

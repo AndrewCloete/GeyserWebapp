@@ -46,9 +46,10 @@ public static String get(String getURI){
 				builder.append(line);
 			}
 			
+			
 			String content64 =  parseSCLreply(builder.toString());
 			decoded_reply = new String(Base64.decodeBase64(content64.getBytes()));
-			
+
 
 		}catch (MalformedURLException e){
 			System.out.println(e);
@@ -102,7 +103,7 @@ public static String get(String getURI){
 	private static String parseSCLreply(String sclXML)
 	{
 		//(1)
-		Pattern r1 = Pattern.compile("(?<=<om2m:content xmime:contentType=\"application\\/xml\">).*(?=<\\/om2m:content>)", Pattern.DOTALL);
+		Pattern r1 = Pattern.compile("(?<=<om2m:content>).*(?=<\\/om2m:content>)", Pattern.DOTALL);
 		Matcher m1 = r1.matcher(sclXML);
 		
 		if (m1.find( )) {
