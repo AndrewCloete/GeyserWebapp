@@ -11,7 +11,7 @@
 
 package acza.sun.ee.geyserM2M.webapp.controller;
 
-import acza.sun.ee.geyserM2M.webapp.model.SCLhttpClient;
+import acza.sun.ee.geyserM2M.SCLapi;
 
 import java.io.IOException;
 
@@ -56,42 +56,55 @@ public class GeyserServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		final String NIP_ID = "geyser_udpNIP";
-		String geyser_id = request.getParameter("geyser_id_box");
-		String data_container_id = geyser_id + "_data";
-		String control_container_id = geyser_id + "_control_settings";
-		String data_container_uri = "localhost:8080/om2m/nscl/applications/" + NIP_ID + "/containers/" + data_container_id + "/contentInstances/latest";
-		String control_container_uri = "localhost:8080/om2m/nscl/applications/" + NIP_ID + "/containers/" + control_container_id + "/contentInstances";
+		long geyser_id = (long)0000; //Default id; TODO: Next version, find a better way to handle this
+		try{
+			geyser_id = new Long(request.getParameter("geyser_id_box"));
+		}catch(NumberFormatException e){
+			System.out.println("Invalid geyser_ID");
+		}
 		
-		String scl_reply = SCLhttpClient.get(data_container_uri);
-		System.out.println(scl_reply);//Debug reply
-		System.out.println(data_container_id);
-
-		request.setAttribute("geyserID", getValueFromJSON("id", scl_reply));
-		request.setAttribute("internalTemp", getValueFromJSON("t1", scl_reply));
-		request.setAttribute("elementState", getValueFromJSON("e", scl_reply));
+		//Create new SCL instance that represents the NSCL
+		SCLapi nscl = new SCLapi(); //TODO: This will become the singleton in the new webapp
+		
+		//Retrieve geyser DATA from NSCL
+		String json_data  = "{\"e\":\"DUMMY\"}"; //nscl.retrieveLatestContent((long)1234, "DATA");
+		nscl.createContainer(geyser_id, "TEST");
+		System.out.println("DATA from NSCL: " + json_data);//Debug reply
+		
+		//Add values to new form update
+		request.setAttribute("geyserID", getValueFromJSON("id", json_data));
+		request.setAttribute("internalTemp", getValueFromJSON("t1", json_data));
+		request.setAttribute("elementState", getValueFromJSON("e", json_data));
 		request.setAttribute("geyser_id_box", geyser_id);
 		
+		
+		//--------------------- Read value of desired element mode from form --------------------
 		String next_element_state = request.getParameter("element_select");
-
+		String reply_command = "{}";
 		try{
 			if(next_element_state.equals("ON")){
-				SCLhttpClient.post(control_container_uri, "{\"e\":\"ON\"}");
+				reply_command = "{\"e\":\"ON\"}";
 				System.out.println("Element on select: " + next_element_state);
 			}
 			else if (next_element_state.equals("OFF")){
-				SCLhttpClient.post(control_container_uri, "{\"e\":\"OFF\"}");
+				reply_command = "{\"e\":\"OFF\"}";
 				System.out.println("Element off select: " + next_element_state);
 			}
 			else if (next_element_state.equals("AUTO")){
-				SCLhttpClient.post(control_container_uri, "{\"e\":\"AUTO\"}");
+				reply_command = "{\"e\":\"AUTO\"}";
 				System.out.println("Element off select: " + next_element_state);
 			}
 			else{
 				System.out.println("Element none select: " + next_element_state);
 			}
 		}catch(NullPointerException e){}
+		//---------------------------------------------------------------------------------------
 		
+		//PUT new settings request to NSCL. 
+		//NB client must PUT not POST data. This will ensure that a container is not accidentally created
+		nscl.updateContentInstance(geyser_id, "SETTINGS", reply_command);
+		
+		//Update view
 		RequestDispatcher view = request.getRequestDispatcher("/geyserstatus.jsp");
 		view.forward(request, response);
 	}

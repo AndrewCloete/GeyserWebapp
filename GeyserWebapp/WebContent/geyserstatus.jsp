@@ -71,7 +71,7 @@
 </tr>
 </tr>
 <tr>
-	<th>Switch element:</th>
+	<th>Element mode:</th>
 	<td>
  		 <select name = "element_select">
  		 	<option value="-">--</option>

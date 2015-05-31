@@ -8,17 +8,43 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/andrew/eclipse/plugins/javax.servlet_3.0.0.v201112011016.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/home/andrew/eclipse/plugins/org.apache.commons.codec_1.4.0.v201209201156.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="/home/andrew/workspace/JSONParser/lib/json-simple-1.1.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/andrew/git/GeyserNIP/GeyserNIP/bin">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/classes"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/andrew/git/org.eclipse.om2m/org.eclipse.om2m.commons/target/classes">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/classes"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/andrew/git/org.eclipse.om2m/org.eclipse.om2m.comm.http/target/classes">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/classes"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/andrew/git/org.eclipse.om2m/org.eclipse.om2m.comm.service/target/classes">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/classes"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/andrew/workspace/JettyEmbeddedHelloWorld/lib/javax.servlet-api-3.1.0.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/andrew/eclipse/plugins/org.apache.commons.httpclient_3.1.0.v201012070820.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/andrew/eclipse/plugins/org.apache.commons.codec_1.4.0.v201209201156.jar"/>
+	<classpathentry kind="lib" path="/home/andrew/eclipse/plugins/org.apache.commons.logging_1.1.1.v201101211721.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
